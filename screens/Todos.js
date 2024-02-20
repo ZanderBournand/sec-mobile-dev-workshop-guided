@@ -68,7 +68,7 @@ export default function Todos() {
   ].filter((section) => section.data.length > 0);
 
   const emptyList = () => (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View style={styles.emptyContainer}>
       <Text>Press the "+" button to get started</Text>
     </View>
   );
@@ -92,11 +92,10 @@ export default function Todos() {
         renderSectionHeader={({ section: { title } }) => (
           <Text style={styles.header}>{title}</Text>
         )}
-        contentContainerStyle={styles.itemList}
-        SectionSeparatorComponent={() => <View style={{ height: 10 }} />}
-        renderSectionFooter={() => <View style={{ height: 50 }} />}
-        stickySectionHeadersEnabled={false}
+        contentContainerStyle={styles.listContentContainer}
+        renderSectionFooter={() => <View style={styles.sectionFooter} />}
         ListEmptyComponent={emptyList}
+        stickySectionHeadersEnabled={false}
       />
       <TodoModal
         todoInput={todoInput}
@@ -124,10 +123,14 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 18,
     fontWeight: "bold",
+    marginBottom: "3%",
   },
-  itemList: {
+  listContentContainer: {
     flexGrow: 1,
     paddingVertical: "5%",
+  },
+  sectionFooter: {
+    height: 50,
   },
   addButton: {
     position: "absolute",
@@ -140,5 +143,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#39485e",
     borderRadius: 30,
     elevation: 8,
+  },
+  emptyContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

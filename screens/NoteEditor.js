@@ -7,7 +7,7 @@ import {
   Text,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import * as Clipboard from "expo-clipboard";
@@ -43,83 +43,28 @@ export default function NoteEditor({ route }) {
 
   return (
     <View style={{ flex: 1 }}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          height: 100,
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1,
-          backgroundColor: "white",
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          borderColor: "#d7d7d7",
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            marginLeft: "5%",
-            backgroundColor: "#39485e",
-            paddingHorizontal: 10,
-            paddingVertical: 4,
-            borderRadius: 5,
-            marginBottom: 5,
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-          onPress={handleSave}
-        >
+      <View style={styles.headerContainer}>
+        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Ionicons name="checkmark-done" size={20} color="white" />
-          <Text
-            style={{
-              color: "white",
-              fontWeight: "600",
-              fontSize: 13,
-              paddingLeft: 5,
-            }}
-          >
-            Done
-          </Text>
+          <Text style={styles.saveButtonText}>Done</Text>
         </TouchableOpacity>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginRight: "5%",
-            marginBottom: 10,
-          }}
-        >
+        <View style={styles.actionButtonsContainer}>
           <TouchableOpacity
+            style={styles.deleteButton}
             onPress={handleDeletion}
-            style={{ marginRight: 15 }}
           >
             <Ionicons name="trash-outline" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-            onPress={copyToClipboard}
-          >
+          <TouchableOpacity style={styles.copyButton} onPress={copyToClipboard}>
             <Ionicons name="copy-outline" size={24} color="black" />
-            <Text style={{ paddingLeft: 5 }}>Copy</Text>
+            <Text style={styles.copyButtonText}>Copy</Text>
           </TouchableOpacity>
         </View>
       </View>
       <KeyboardAwareScrollView
         ref={scrollRef}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{
-          flex: 1,
-          backgroundColor: "white",
-          paddingHorizontal: "5%",
-          paddingVertical: "5%",
-          paddingTop: 100, // Add padding to account for the header
-        }}
+        style={styles.editorContainer}
         onContentSizeChange={() =>
           scrollRef.current.scrollToEnd({ animated: true })
         }
@@ -128,20 +73,82 @@ export default function NoteEditor({ route }) {
           placeholder="Enter title"
           value={title}
           onChangeText={setTitle}
-          style={{ fontSize: 20, fontWeight: "600", marginVertical: "10%" }}
+          style={styles.titleInput}
         />
         <TextInput
           placeholder="Start typing here..."
           value={content}
           onChangeText={setContent}
-          style={{
-            fontSize: 16,
-            fontWeight: "300",
-            height: "100%",
-          }}
+          style={styles.contentInput}
           multiline
         />
       </KeyboardAwareScrollView>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+    height: 100,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
+    backgroundColor: "white",
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: "#d7d7d7",
+  },
+  saveButton: {
+    marginLeft: "5%",
+    backgroundColor: "#39485e",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 5,
+    marginBottom: 5,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  saveButtonText: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: 13,
+    paddingLeft: 5,
+  },
+  actionButtonsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: "5%",
+    marginBottom: 10,
+  },
+  deleteButton: {
+    marginRight: 15,
+  },
+  copyButton: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  copyButtonText: {
+    paddingLeft: 5,
+  },
+  editorContainer: {
+    flex: 1,
+    backgroundColor: "white",
+    paddingHorizontal: "5%",
+    paddingVertical: "5%",
+    paddingTop: 100, // Add padding to account for the header
+  },
+  titleInput: {
+    fontSize: 20,
+    fontWeight: "600",
+    marginVertical: "10%",
+  },
+  contentInput: {
+    fontSize: 16,
+    fontWeight: "300",
+    height: "100%",
+  },
+});

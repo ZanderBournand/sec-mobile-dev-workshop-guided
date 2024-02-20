@@ -1,11 +1,5 @@
-import React, { useCallback, useRef } from "react";
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-} from "react-native";
+import { useCallback, useRef } from "react";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import {
   BottomSheetModal,
   BottomSheetBackdrop,
@@ -47,7 +41,7 @@ export default function TodoModal({
         }
       }}
     >
-      <View style={styles.inputContainer}>
+      <View style={styles.modalContainer}>
         <BottomSheetTextInput
           ref={inputRef}
           style={styles.input}
@@ -55,43 +49,16 @@ export default function TodoModal({
           onChangeText={setTodoInput}
           placeholder="Task Name"
         />
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            justifyContent: "center",
-          }}
-        >
+        <View style={styles.buttonsContainer}>
           <TouchableOpacity
-            style={{
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-              marginHorizontal: 10,
-              borderRadius: 5,
-              backgroundColor: "rgba(229, 229, 229, 0.8)", // 80% opacity
-              marginTop: 25,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+            style={styles.cancelButton}
             onPress={() => bottomSheetModalRef.current?.dismiss()}
           >
-            <Text style={{ color: "#363636" }}>Cancel</Text>
+            <Text style={styles.cancelButtonText}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-              marginHorizontal: 10,
-              borderRadius: 5,
-              backgroundColor: "#39485e",
-              marginTop: 25,
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-            onPress={handleAddTodo}
-          >
+          <TouchableOpacity style={styles.addButton} onPress={handleAddTodo}>
             <Ionicons name="add" size={25} color="white" />
-            <Text style={{ color: "white", paddingLeft: "3%" }}>Add task</Text>
+            <Text style={styles.addButtonText}>Add task</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -100,7 +67,7 @@ export default function TodoModal({
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
+  modalContainer: {
     flex: 1,
     alignItems: "left",
     paddingHorizontal: 20,
@@ -111,5 +78,37 @@ const styles = StyleSheet.create({
     width: "90%",
     padding: 10,
     fontSize: 20,
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "center",
+  },
+  cancelButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    marginHorizontal: 10,
+    borderRadius: 5,
+    backgroundColor: "rgba(229, 229, 229, 0.8)", // 80% opacity
+    marginTop: 25,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cancelButtonText: {
+    color: "#363636",
+  },
+  addButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    marginHorizontal: 10,
+    borderRadius: 5,
+    backgroundColor: "#39485e",
+    marginTop: 25,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  addButtonText: {
+    color: "white",
+    paddingLeft: "3%",
   },
 });

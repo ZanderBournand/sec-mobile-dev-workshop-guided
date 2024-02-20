@@ -55,7 +55,7 @@ export default function Notes({ route }) {
   const navigation = useNavigation();
 
   const emptyList = () => (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View style={styles.emptyContainer}>
       <Text>Press the "pencil" button to get started</Text>
     </View>
   );
@@ -68,12 +68,8 @@ export default function Notes({ route }) {
         renderItem={({ item }) => (
           <NoteItem item={item} navigation={navigation} />
         )}
-        contentContainerStyle={{
-          flex: 1,
-          width: "85%",
-          alignSelf: "center",
-        }}
-        style={{ width: "100%" }}
+        contentContainerStyle={styles.listContentContainer}
+        style={styles.listContainer}
         ListEmptyComponent={emptyList}
       />
       <TouchableOpacity
@@ -93,6 +89,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  listContainer: {
+    width: "100%",
+  },
+  listContentContainer: {
+    flex: 1,
+    width: "85%",
+    alignSelf: "center",
+  },
   addButton: {
     position: "absolute",
     width: 56,
@@ -104,5 +108,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#39485e",
     borderRadius: 30,
     elevation: 8,
+  },
+  emptyContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
