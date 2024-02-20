@@ -14,11 +14,7 @@ const getOptions = (barLabel, iconName, isHeaderShown) => ({
     <Ionicons name={iconName} size={size} color={color} />
   ),
   tabBarLabel: barLabel,
-  tabBarActiveTintColor: "#39485e",
   headerShown: isHeaderShown,
-  headerStyle: {
-    height: 100, // Specify the height of the custom header
-  },
 });
 
 const NotesStackScreen = () => {
@@ -40,7 +36,14 @@ const NotesStackScreen = () => {
 export default function AppNavigator() {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={{
+          headerStyle: {
+            height: 100,
+          },
+          tabBarActiveTintColor: "#39485e",
+        }}
+      >
         <Tab.Screen
           name="Todos"
           component={Todos}
