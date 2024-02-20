@@ -1,12 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   SectionList,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import uuid from "react-native-uuid";
@@ -15,57 +13,49 @@ import TodoModal from "../components/TodoModal";
 import { loadFromStorage, saveToStorage } from "../utils/storage";
 
 export default function Todos() {
-  const [todos, setTodos] = useState(() => {
-    loadFromStorage("todos").then((loadedTodos) => {
-      setTodos(loadedTodos);
-    });
-    return [];
-  });
-  const [todoInput, setTodoInput] = useState("");
+  const [todos, setTodos] = useState(null);
   const bottomSheetModalRef = useRef(null);
 
   useEffect(() => {
-    saveToStorage(todos, "todos");
+    loadFromStorage("todos").then((loadedTodos) => {
+      setTodos(loadedTodos);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (todos) {
+      saveToStorage(todos, "todos");
+    }
   }, [todos]);
 
-  const handleAddTodo = () => {
-    const newId = uuid.v4();
+  const handleAddTodo = (input) => {
+    const newTodo = {
+      id: uuid.v4(),
+      task: input,
+      completed: false,
+    };
 
-    setTodos((prevTodos) => [
-      ...prevTodos,
-      { id: newId, title: todoInput, completed: false },
-    ]);
-
-    setTodoInput("");
-    bottomSheetModalRef.current?.dismiss();
+    setTodos((prevTodos) => [...prevTodos, newTodo]);
   };
-
-  const handlePresentModalPress = useCallback((platform) => {
-    bottomSheetModalRef.current?.present();
-  }, []);
 
   const handleCheck = (id) => {
     setTodos((prevTodos) => {
-      return prevTodos.map((todo) => {
-        if (todo.id === id) {
-          return { ...todo, completed: !todo.completed };
-        } else {
-          return todo;
-        }
-      });
+      return prevTodos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      );
     });
   };
 
   const handleDeletion = (id) => {
     setTodos((prevTodos) => {
-      return prevTodos.filter((todo) => todo.id !== id);
+      return prevTodos?.filter((todo) => todo.id !== id);
     });
   };
 
   const sections = [
-    { title: "Active", data: todos.filter((todo) => !todo.completed) },
-    { title: "Completed", data: todos.filter((todo) => todo.completed) },
-  ].filter((section) => section.data.length > 0);
+    { title: "Active", data: todos?.filter((todo) => !todo.completed) },
+    { title: "Completed", data: todos?.filter((todo) => todo.completed) },
+  ].filter((section) => section.data?.length > 0);
 
   const emptyList = () => (
     <View style={styles.emptyContainer}>
@@ -74,17 +64,13 @@ export default function Todos() {
   );
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
+    <View style={styles.container}>
       <SectionList
         sections={sections}
         keyExtractor={(item) => item.id}
-        renderItem={({ item, section: { title } }) => (
+        renderItem={({ item }) => (
           <TodoItem
             item={item}
-            completed={title === "Completed"}
             onCheck={handleCheck}
             onDeletion={handleDeletion}
           />
@@ -98,18 +84,16 @@ export default function Todos() {
         stickySectionHeadersEnabled={false}
       />
       <TodoModal
-        todoInput={todoInput}
-        setTodoInput={setTodoInput}
         handleAddTodo={handleAddTodo}
         bottomSheetModalRef={bottomSheetModalRef}
       />
       <TouchableOpacity
         style={styles.addButton}
-        onPress={handlePresentModalPress}
+        onPress={() => bottomSheetModalRef.current?.present()}
       >
         <Ionicons name="add" size={25} color="white" />
       </TouchableOpacity>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 

@@ -1,5 +1,12 @@
-import { useCallback, useRef } from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Platform,
+  Keyboard,
+} from "react-native";
 import {
   BottomSheetModal,
   BottomSheetBackdrop,
@@ -7,13 +14,40 @@ import {
 } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function TodoModal({
-  todoInput,
-  setTodoInput,
-  handleAddTodo,
-  bottomSheetModalRef,
-}) {
+export default function TodoModal({ handleAddTodo, bottomSheetModalRef }) {
+  const [todoInput, setTodoInput] = useState("");
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const [enableDismissOnClose, setEnableDismissOnClose] = useState(true);
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (Platform.OS !== "android") return;
+
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => setKeyboardOpen(true)
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => setKeyboardOpen(false)
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    setEnableDismissOnClose(!keyboardOpen);
+  }, [keyboardOpen]);
+
+  const handleAddTaskButton = () => {
+    handleAddTodo(todoInput);
+    setTodoInput("");
+    bottomSheetModalRef.current?.dismiss();
+  };
 
   // Background whenever the modal is open
   const renderBackdrop = useCallback(
@@ -33,13 +67,14 @@ export default function TodoModal({
       ref={bottomSheetModalRef}
       index={0}
       snapPoints={["25%"]}
-      enableDismissOnClose
       backdropComponent={renderBackdrop}
       onChange={(index) => {
         if (index === 0) {
           inputRef.current?.focus();
         }
       }}
+      android_keyboardInputMode="adjustResize"
+      enableDismissOnClose={enableDismissOnClose}
     >
       <View style={styles.modalContainer}>
         <BottomSheetTextInput
@@ -56,7 +91,10 @@ export default function TodoModal({
           >
             <Text style={styles.cancelButtonText}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.addButton} onPress={handleAddTodo}>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={handleAddTaskButton}
+          >
             <Ionicons name="add" size={25} color="white" />
             <Text style={styles.addButtonText}>Add task</Text>
           </TouchableOpacity>

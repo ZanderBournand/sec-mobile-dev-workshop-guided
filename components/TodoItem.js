@@ -2,16 +2,16 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "./Checkbox";
 
-export default function TodoItem({ item, completed, onCheck, onDeletion }) {
+export default function TodoItem({ item, onCheck, onDeletion }) {
   return (
     <View style={styles.todoItem}>
       <Checkbox isChecked={item.completed} onCheck={() => onCheck(item.id)} />
       <Text
-        style={[styles.todoText, completed && styles.todoTextCompleted]}
+        style={[styles.todoText, item.completed && styles.todoTextCompleted]}
         numberOfLines={1}
         ellipsizeMode="tail"
       >
-        {item.title}
+        {item.task}
       </Text>
       <TouchableOpacity onPress={() => onDeletion(item.id)}>
         <Ionicons name="close" size={20} color="black" />

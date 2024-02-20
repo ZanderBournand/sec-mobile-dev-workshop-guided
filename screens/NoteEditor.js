@@ -9,21 +9,19 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRef, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import * as Clipboard from "expo-clipboard";
+import uuid from "react-native-uuid";
 
-export default function NoteEditor({ route }) {
+export default function NoteEditor({ navigation, route }) {
   const note = route.params?.note;
 
   const [title, setTitle] = useState(note?.title || "");
   const [content, setContent] = useState(note?.content || "");
   const scrollRef = useRef();
 
-  const navigation = useNavigation();
-
   const handleSave = () => {
     const newNote = {
-      ...note,
+      id: note?.id || uuid.v4(),
       title,
       content,
       lastModified: Date.now(),
@@ -33,7 +31,7 @@ export default function NoteEditor({ route }) {
   };
 
   const handleDeletion = () => {
-    navigation.navigate("Notes", { deletedNoteId: note.id });
+    navigation.navigate("Notes", note?.id && { deletedNoteId: note.id });
   };
 
   const copyToClipboard = async () => {
@@ -139,7 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     paddingHorizontal: "5%",
     paddingVertical: "5%",
-    paddingTop: 100, // Add padding to account for the header
+    paddingTop: 100,
   },
   titleInput: {
     fontSize: 20,
@@ -149,6 +147,6 @@ const styles = StyleSheet.create({
   contentInput: {
     fontSize: 16,
     fontWeight: "300",
-    height: "100%",
+    marginBottom: 150,
   },
 });

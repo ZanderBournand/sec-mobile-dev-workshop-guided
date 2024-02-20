@@ -6,53 +6,49 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import uuid from "react-native-uuid";
-import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { loadFromStorage, saveToStorage } from "../utils/storage";
 import NoteItem from "../components/NoteItem";
 
-export default function Notes({ route }) {
-  const [notes, setNotes] = useState(() => {
+export default function Notes({ navigation, route }) {
+  const [notes, setNotes] = useState(null);
+
+  useEffect(() => {
     loadFromStorage("notes").then((loadedNotes) => {
       setNotes(loadedNotes);
     });
-    return [];
-  });
+  }, []);
 
   useEffect(() => {
-    saveToStorage(notes, "notes");
+    if (notes) {
+      saveToStorage(notes, "notes");
+    }
   }, [notes]);
 
   useEffect(() => {
     const deletedNoteId = route.params?.deletedNoteId;
     if (deletedNoteId) {
       setNotes((prevNotes) =>
-        prevNotes.filter((note) => note.id !== deletedNoteId)
+        prevNotes?.filter((note) => note.id !== deletedNoteId)
       );
     }
   }, [route.params?.deletedNoteId]);
 
   useEffect(() => {
     const newNote = route.params?.newNote;
-    setNotes((prevNotes) => {
-      const existingNoteIndex = prevNotes.findIndex(
-        (note) => note.id === newNote.id
-      );
-
-      if (existingNoteIndex !== -1) {
-        // Note exists, update it
-        return prevNotes.map((note, index) =>
-          index === existingNoteIndex ? newNote : note
-        );
-      } else {
-        // Note doesn't exist, add it
-        return [...prevNotes, { ...newNote, id: uuid.v4() }];
-      }
-    });
+    if (newNote) {
+      setNotes((prevNotes) => {
+        const noteExists = prevNotes.some((note) => note.id === newNote.id);
+        if (noteExists) {
+          return prevNotes.map((note) =>
+            note.id === newNote.id ? newNote : note
+          );
+        } else {
+          return [...prevNotes, newNote];
+        }
+      });
+    }
   }, [route.params?.newNote]);
-
-  const navigation = useNavigation();
 
   const emptyList = () => (
     <View style={styles.emptyContainer}>
@@ -63,7 +59,7 @@ export default function Notes({ route }) {
   return (
     <View style={styles.container}>
       <FlatList
-        data={notes.sort((a, b) => b.lastModified - a.lastModified)}
+        data={notes?.sort((a, b) => b.lastModified - a.lastModified)}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <NoteItem item={item} navigation={navigation} />
