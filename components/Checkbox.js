@@ -2,6 +2,7 @@ import { TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function Checkbox({ isChecked, onCheck }) {
+  // On click of the checkbox, call the function that was passed in via the parent component
   const toggleCheck = () => {
     if (onCheck) onCheck();
   };
@@ -11,9 +12,11 @@ export default function Checkbox({ isChecked, onCheck }) {
       onPress={toggleCheck}
       style={[
         styles.checkbox,
+        // Styling changes based on the state of the checkbox
         isChecked ? styles.checkedBox : styles.uncheckedBox,
       ]}
     >
+      {/* If the checkbox is checked, display the checkmark */}
       {isChecked && <Ionicons name="checkmark-sharp" size={20} color="white" />}
     </TouchableOpacity>
   );

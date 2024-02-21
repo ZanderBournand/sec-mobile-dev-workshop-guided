@@ -6,9 +6,12 @@ import Todos from "../screens/Todos";
 import Notes from "../screens/Notes";
 import NoteEditor from "../screens/NoteEditor";
 
+// Creates the navigator at the bottom of the screen (for the Todos and Notes screens)
 const Tab = createBottomTabNavigator();
+// Create the navigation stack between the Notes and NoteEditor screens
 const NotesStack = createStackNavigator();
 
+// Util function to build screen options for the bottom tab navigator
 const getOptions = (barLabel, iconName, isHeaderShown) => ({
   tabBarIcon: ({ color, size }) => (
     <Ionicons name={iconName} size={size} color={color} />
@@ -17,6 +20,7 @@ const getOptions = (barLabel, iconName, isHeaderShown) => ({
   headerShown: isHeaderShown,
 });
 
+// Stack navigation for the Notes and NoteEditor screens
 const NotesStackScreen = () => {
   return (
     <NotesStack.Navigator
@@ -27,6 +31,7 @@ const NotesStackScreen = () => {
       <NotesStack.Screen
         name="NoteEditor"
         component={NoteEditor}
+        // Hide the header for the NoteEditor screen (implements a custom header in NoteEditor.js)
         options={{ headerShown: false }}
       />
     </NotesStack.Navigator>
@@ -36,6 +41,7 @@ const NotesStackScreen = () => {
 export default function AppNavigator() {
   return (
     <NavigationContainer>
+      {/* Bottom tab navigator for the Todos and Notes screens */}
       <Tab.Navigator
         screenOptions={{
           headerStyle: {
@@ -44,11 +50,13 @@ export default function AppNavigator() {
           tabBarActiveTintColor: "#39485e",
         }}
       >
+        {/* Screen for the Todos component */}
         <Tab.Screen
           name="Todos"
           component={Todos}
           options={getOptions("Todos", "list", true)}
         />
+        {/* Screen for the Notes section */}
         <Tab.Screen
           name="NotesStack"
           component={NotesStackScreen}

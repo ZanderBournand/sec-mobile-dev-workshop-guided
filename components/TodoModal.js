@@ -15,11 +15,17 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 export default function TodoModal({ handleAddTodo, bottomSheetModalRef }) {
+  // State to keep track of the user's input
   const [todoInput, setTodoInput] = useState("");
+
+  // Extra state variables to fix an Android bug with the BottomSheet library
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [enableDismissOnClose, setEnableDismissOnClose] = useState(true);
+
+  // Ref to the input field -> allows us to focus on it when the modal is open
   const inputRef = useRef(null);
 
+  // Extra useEffect to fix an Android bug with the BottomSheet library
   useEffect(() => {
     if (Platform.OS !== "android") return;
 
@@ -39,17 +45,19 @@ export default function TodoModal({ handleAddTodo, bottomSheetModalRef }) {
     };
   }, []);
 
+  // Extra useEffect to fix an Android bug with the BottomSheet library
   useEffect(() => {
     setEnableDismissOnClose(!keyboardOpen);
   }, [keyboardOpen]);
 
+  // Function to handle the creatio of a new task (calls the function passed in the params via the parent component)
   const handleAddTaskButton = () => {
     handleAddTodo(todoInput);
     setTodoInput("");
     bottomSheetModalRef.current?.dismiss();
   };
 
-  // Background whenever the modal is open
+  // Renders a "dark" background whenever the modal is open
   const renderBackdrop = useCallback(
     (props) => (
       <BottomSheetBackdrop
@@ -62,12 +70,14 @@ export default function TodoModal({ handleAddTodo, bottomSheetModalRef }) {
     []
   );
 
+  // BottomSheetModal is a component from the BottomSheet library that allows us to create a modal that slides up from the bottom of the screen
   return (
     <BottomSheetModal
       ref={bottomSheetModalRef}
       index={0}
       snapPoints={["25%"]}
       backdropComponent={renderBackdrop}
+      // When the modal is open, focus on the input field
       onChange={(index) => {
         if (index === 0) {
           inputRef.current?.focus();
@@ -77,6 +87,7 @@ export default function TodoModal({ handleAddTodo, bottomSheetModalRef }) {
       enableDismissOnClose={enableDismissOnClose}
     >
       <View style={styles.modalContainer}>
+        {/* Text input field to create a new task */}
         <BottomSheetTextInput
           ref={inputRef}
           style={styles.input}
@@ -87,12 +98,14 @@ export default function TodoModal({ handleAddTodo, bottomSheetModalRef }) {
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
             style={styles.cancelButton}
+            // On click of the "cancel" button, dismiss the modal
             onPress={() => bottomSheetModalRef.current?.dismiss()}
           >
             <Text style={styles.cancelButtonText}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.addButton}
+            // On click of the "add" button, call the function to create a new task
             onPress={handleAddTaskButton}
           >
             <Ionicons name="add" size={25} color="white" />

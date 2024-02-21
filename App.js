@@ -6,9 +6,13 @@ import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   return (
+    // Wrapper component that powers the gestures of the BottomSheet library
     <GestureHandlerRootView style={styles.appContainer}>
+      {/* Wrapper component to enable the use of the BottomSheet library */}
       <BottomSheetModalProvider>
+        {/* Controls the device's status bar (Expo SDK) */}
         <StatusBar style="auto" />
+        {/* Main navigation component */}
         <AppNavigator />
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
