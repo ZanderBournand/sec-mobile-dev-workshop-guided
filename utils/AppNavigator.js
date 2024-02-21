@@ -50,7 +50,7 @@ export default function AppNavigator() {
           options={getOptions("Todos", "list", true)}
         />
         <Tab.Screen
-          name="Todos2"
+          name="NotesStack"
           component={NotesStackScreen}
           options={getOptions("Notes", "document-text-outline", false)}
         />

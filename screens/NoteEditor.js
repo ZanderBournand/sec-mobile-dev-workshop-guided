@@ -40,7 +40,7 @@ export default function NoteEditor({ navigation, route }) {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <View style={styles.headerContainer}>
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Ionicons name="checkmark-done" size={20} color="white" />
@@ -86,6 +86,10 @@ export default function NoteEditor({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+  },
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -96,7 +100,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 1,
-    backgroundColor: "white",
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: "#d7d7d7",
   },
@@ -134,7 +137,6 @@ const styles = StyleSheet.create({
   },
   editorContainer: {
     flex: 1,
-    backgroundColor: "white",
     paddingHorizontal: "5%",
     paddingVertical: "5%",
     paddingTop: 100,
