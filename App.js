@@ -12,8 +12,7 @@ export default function App() {
       <BottomSheetModalProvider>
         {/* Controls the device's status bar (Expo SDK) */}
         <StatusBar style="auto" />
-        {/* Main navigation component */}
-        <AppNavigator />
+        {/* Step 1 - part 2 */}
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );

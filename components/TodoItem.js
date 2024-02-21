@@ -3,24 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "./Checkbox";
 
 export default function TodoItem({ item, onCheck, onDeletion }) {
-  return (
-    <View style={styles.todoItem}>
-      {/* On click of the checkbox, call the function passed in the params via the parent component*/}
-      <Checkbox isChecked={item.completed} onCheck={() => onCheck(item.id)} />
-      {/* Display the task of the todo */}
-      <Text
-        style={[styles.todoText, item.completed && styles.todoTextCompleted]}
-        numberOfLines={1}
-        ellipsizeMode="tail"
-      >
-        {item.task}
-      </Text>
-      {/* On click of the "delete" icon, call the function passed in the params via the parent component*/}
-      <TouchableOpacity onPress={() => onDeletion(item.id)}>
-        <Ionicons name="close" size={20} color="black" />
-      </TouchableOpacity>
-    </View>
-  );
+  return <View style={styles.todoItem}>{/* Step 2 - part 3 */}</View>;
 }
 
 const styles = StyleSheet.create({

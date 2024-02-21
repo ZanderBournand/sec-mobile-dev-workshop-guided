@@ -14,87 +14,44 @@ import { loadFromStorage, saveToStorage } from "../utils/storage";
 
 export default function Todos() {
   // State to keep track of the user's todos
-  const [todos, setTodos] = useState(null);
+  const [todos, setTodos] = useState([
+    // Step 2 - part 10
+    { id: uuid.v4(), task: "Buy groceries", completed: false },
+    { id: uuid.v4(), task: "Do laundry", completed: false },
+  ]);
+
   // Ref to the modal component -> allows us to present/dismiss the modal from the parent component
   const bottomSheetModalRef = useRef(null);
 
-  // Hook to load the todos from the device's storage when the screen is mounted
-  useEffect(() => {
-    loadFromStorage("todos").then((loadedTodos) => {
-      setTodos(loadedTodos);
-    });
-  }, []);
+  // Step 2 - part 8
 
-  // Hook to save the todos to the device's storage whenever the todos changes (completed, create, delete)
-  useEffect(() => {
-    if (todos) {
-      saveToStorage(todos, "todos");
-    }
-  }, [todos]);
+  // Step 2 - part 9
 
   // Callback function to handle the creation of a new todo (called from the TodoModal component)
   const handleAddTodo = (input) => {
-    const newTodo = {
-      id: uuid.v4(),
-      task: input,
-      completed: false,
-    };
-
-    setTodos((prevTodos) => [...prevTodos, newTodo]);
+    // Step 2 - part 5
   };
 
   // Callback function to handle the completion of a todo (called from the TodoItem component)
   const handleCheck = (id) => {
-    setTodos((prevTodos) => {
-      return prevTodos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      );
-    });
+    // Step 2 - part 4
   };
 
   // Callback function to handle the deletion of a todo (called from the TodoItem component)
   const handleDeletion = (id) => {
-    setTodos((prevTodos) => {
-      return prevTodos?.filter((todo) => todo.id !== id);
-    });
+    // Step 2 - part 4
   };
 
-  // Object that separates the todos into two sections: active and completed (passed to the SectionList component)
-  const sections = [
-    { title: "Active", data: todos?.filter((todo) => !todo.completed) },
-    { title: "Completed", data: todos?.filter((todo) => todo.completed) },
-  ].filter((section) => section.data?.length > 0);
+  // Step 2 - part 1
 
-  // Function to render an empty list message (if no todos)
-  const emptyList = () => (
-    <View style={styles.emptyContainer}>
-      <Text>Press the "+" button to get started</Text>
-    </View>
-  );
+  // Step 2 - part 6
 
   return (
     <View style={styles.container}>
-      {/* List of todos */}
-      <SectionList
-        sections={sections}
-        keyExtractor={(item) => item.id}
-        // What to render for each todo
-        renderItem={({ item }) => (
-          <TodoItem
-            item={item}
-            onCheck={handleCheck}
-            onDeletion={handleDeletion}
-          />
-        )}
-        // Rendering the title of the sections
-        renderSectionHeader={({ section: { title } }) => (
-          <Text style={styles.header}>{title}</Text>
-        )}
-        contentContainerStyle={styles.listContentContainer}
-        renderSectionFooter={() => <View style={styles.sectionFooter} />}
-        ListEmptyComponent={emptyList}
-        stickySectionHeadersEnabled={false}
-      />
+      {/* Step 2 - part 1 */}
+      {/* Step 2 - part 3 */}
+      {/* Step 2 - part 6 */}
+
       {/* Modal to create a new todo (called via button below) */}
       <TodoModal
         handleAddTodo={handleAddTodo}

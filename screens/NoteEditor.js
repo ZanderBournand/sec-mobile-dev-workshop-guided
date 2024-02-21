@@ -13,39 +13,27 @@ import * as Clipboard from "expo-clipboard";
 import uuid from "react-native-uuid";
 
 export default function NoteEditor({ navigation, route }) {
-  // Extract the note from the route's params (if it doesn't exist, its a new note being created)
-  const note = route.params?.note;
-
+  // Step 3 - part 4
   // State to keep track of the user's input (both title and content of note)
-  const [title, setTitle] = useState(note?.title || "");
-  const [content, setContent] = useState(note?.content || "");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
   // Ref to control the scroll view (scroll to bottom, top, etc...)
   const scrollRef = useRef();
 
   // Function to be called when the user presses the "Done" button
   const handleSave = () => {
-    const newNote = {
-      id: note?.id || uuid.v4(),
-      title,
-      content,
-      lastModified: Date.now(),
-    };
-
-    // Navigate back to the Notes screen, passing the new note as a parameter
-    navigation.navigate("Notes", { newNote });
+    // Step 3 - part 5
   };
 
   // Function to be called when the user presses the "trashcan" icon
   const handleDeletion = () => {
-    // Navigate back to the Notes screen, passing the ID of the note to be deleted as a parameter
-    navigation.navigate("Notes", note?.id && { deletedNoteId: note.id });
+    // Step 3 - part 6
   };
 
   // Function to copy the note's content to the clipboard (uses Expo SDK's Clipboard module)
   const copyToClipboard = async () => {
-    const noteString = `${title}\n\n${content}`;
-    await Clipboard.setStringAsync(noteString);
+    // Step 3 - part 7
   };
 
   return (
@@ -72,33 +60,7 @@ export default function NoteEditor({ navigation, route }) {
           </TouchableOpacity>
         </View>
       </View>
-      {/* Scrollable view for the note editor */}
-      <KeyboardAwareScrollView
-        ref={scrollRef}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.editorContainer}
-        // Ensures that the scroll view adjust itself as user types
-        onContentSizeChange={() =>
-          scrollRef.current.scrollToEnd({ animated: true })
-        }
-      >
-        {/* Text input fields for the note's title */}
-        <TextInput
-          placeholder="Enter title"
-          value={title}
-          onChangeText={setTitle}
-          style={styles.titleInput}
-        />
-        {/* Text input fields for the note's content */}
-        <TextInput
-          placeholder="Start typing here..."
-          value={content}
-          onChangeText={setContent}
-          style={styles.contentInput}
-          multiline
-          scrollEnabled={false}
-        />
-      </KeyboardAwareScrollView>
+      {/* Step 3 - part 3 */}
     </View>
   );
 }
