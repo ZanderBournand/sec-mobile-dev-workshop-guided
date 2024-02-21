@@ -21,9 +21,8 @@ const getOptions = (barLabel, iconName, isHeaderShown) => ({
 
 // Stack navigation for the Notes and NoteEditor screens
 const NotesStackScreen = () => {
-  return {
-    /* Step 1 - part 3 */
-  };
+  // Step 1 - part 3
+  return <></>;
 };
 
 export default function AppNavigator() {

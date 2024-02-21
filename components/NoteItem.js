@@ -12,9 +12,8 @@ export default NoteItem = ({ item, navigation }) => {
     hour12: true,
   });
 
-  return {
-    /* Step 3 - part 2 */
-  };
+  // Step 3 - part 2
+  return <></>;
 };
 
 const styles = StyleSheet.create({
